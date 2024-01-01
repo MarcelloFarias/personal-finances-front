@@ -2,7 +2,7 @@ import {useState} from 'react';
 import { Container, Form, Button } from "react-bootstrap";
 import { BiUserPlus, BiUserCheck } from "react-icons/bi";
 import { PiEye, PiEyeClosedDuotone } from "react-icons/pi";
-import { login } from '../../services/user';
+import { login, registerUser } from '../../services/user';
 import './style.scss';
 
 const LoginSignup = () => {
@@ -63,6 +63,22 @@ const LoginSignup = () => {
         return alert('Please fill all fields !');
     }
 
+    async function createAccount() {
+        if(userData.name && userData.email && userData.password && confirmPassword) {
+            if(confirmPassword !== userData.password) {
+                return alert("Passwords doesn't match !");
+            }
+
+            return await registerUser(userData).then((response) => {
+                if(response.success) {
+                    return alert(response.message);
+                }
+                return alert(response.message);
+            });
+        }
+        return alert('Please fill all fields !');
+    }
+
     return (
         <Container className="main-container login-container">
             <div className="buttons-row"> 
@@ -102,12 +118,12 @@ const LoginSignup = () => {
                 <div className='card-content'>
                     <Form.Group className='mt-3'>
                         <Form.Label>Nome</Form.Label>
-                        <Form.Control type="email" placeholder="Digite o seu nome..." name='name' onChange={handleUserData} />
+                        <Form.Control type="text" placeholder="Digite o seu nome..." name='name' onChange={handleUserData} />
                     </Form.Group>
 
                     <Form.Group className="mt-3">
                         <Form.Label>Email</Form.Label>
-                        <Form.Control type="password" placeholder="Digite o seu email..." name='email' onChange={handleUserData} />
+                        <Form.Control type="email" placeholder="Digite o seu email..." name='email' onChange={handleUserData} />
                     </Form.Group>
 
                     <Form.Group className="mt-3">
@@ -131,7 +147,7 @@ const LoginSignup = () => {
                     </Form.Group>
 
                     <Form.Group className="mt-4 d-flex align-items-center justify-content-center flex-column w-100">
-                        <Button variant="primary" className="btn-sign-up">Salvar</Button>
+                        <Button variant="primary" className="btn-sign-up" onClick={() => createAccount()}>Salvar</Button>
                     </Form.Group>
                 </div>
             </div>
