@@ -1,0 +1,11 @@
+@import "../../index.scss";
+
+@media(max-width: 1200px) {
+    .login-img-field {
+        display: none;
+    }
+
+    .login-form-field {
+        width: 100%;
+    }
+}
