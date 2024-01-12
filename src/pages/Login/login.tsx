@@ -6,6 +6,7 @@ import { login } from '../../services/user';
 import { Link } from 'react-router-dom';
 import './style.scss';
 import Header from '../../components/Header/header';
+import Footer from '../../components/Footer/footer';
 
 const Login = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -70,6 +71,7 @@ const Login = () => {
                     </Form>
                 </div>
             </Container>
+            <Footer/>
         </>
     );
 }

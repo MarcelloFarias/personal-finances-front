@@ -7,6 +7,7 @@ import { IUserData } from '../../interfaces/user.interface';
 import { registerUser } from '../../services/user';
 import { PiEye, PiEyeClosedDuotone } from "react-icons/pi";
 import Header from '../../components/Header/header';
+import Footer from '../../components/Footer/footer';
 
 const Signup = () => {
     const [userData, setUserData] = useState<IUserData>({
@@ -93,6 +94,7 @@ const Signup = () => {
                     <Image className="w-75 img-signup" src='/assets/welcome_cats.svg' />
                 </div>
             </Container>
+            <Footer/>
         </>
     );
 }
