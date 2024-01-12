@@ -8,6 +8,8 @@ import { registerUser } from '../../services/user';
 import { PiEye, PiEyeClosedDuotone } from "react-icons/pi";
 import Header from '../../components/Header/header';
 import Footer from '../../components/Footer/footer';
+import { ToastContainer } from 'react-toastify';
+import { alertToastError, alertToastSuccess, alertToastWarning } from '../../components/Toast/toast.';
 
 const Signup = () => {
     const [userData, setUserData] = useState<IUserData>({
@@ -31,15 +33,15 @@ const Signup = () => {
         if (userData.name && userData.email && userData.password && confirmPassword) {
             if (confirmPassword === userData.password) {
                 return await registerUser(userData).then((response: any) => {
-                    if (response.success) {
-                        return alert(response.message);
+                    if(response.success) {
+                        return alertToastSuccess("Usuário registrado com sucesso");
                     }
-                    return alert(response.message);
+                    return alertToastError("E-mail já registrado, por favor tente outro");
                 });
             }
-            return alert("Password's doesn't match !");
+            return alertToastWarning("As senhas não conferem");
         }
-        return alert("please fill all fields !");
+        return alertToastWarning("Por favor, preencha todos os campos");
     }
 
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -94,6 +96,7 @@ const Signup = () => {
                     <Image className="w-75 img-signup" src='/assets/welcome_cats.svg' />
                 </div>
             </Container>
+            <ToastContainer/>
             <Footer/>
         </>
     );

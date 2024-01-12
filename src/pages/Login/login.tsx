@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import './style.scss';
 import Header from '../../components/Header/header';
 import Footer from '../../components/Footer/footer';
+import { alertToastError, alertToastWarning } from '../../components/Toast/toast.';
+import {ToastContainer} from 'react-toastify';
 
 const Login = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -31,12 +33,12 @@ const Login = () => {
         if (loginData.email && loginData.password) {
             return await login(loginData).then((response: any) => {
                 if (response.success) {
-                    return alert('hello');
+                    return ;
                 }
-                return alert(response.message);
+                return alertToastError("E-mail ou senha incorretos");
             });
         }
-        return alert('Please fill all fields !');
+        return alertToastWarning('Por favor, preencha todos os campos');
     }
 
     return (
@@ -71,6 +73,7 @@ const Login = () => {
                     </Form>
                 </div>
             </Container>
+            <ToastContainer />
             <Footer/>
         </>
     );
