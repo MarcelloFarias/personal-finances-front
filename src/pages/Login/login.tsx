@@ -5,12 +5,14 @@ import { PiEye, PiEyeClosedDuotone } from "react-icons/pi";
 import { login } from '../../services/user';
 import { Link } from 'react-router-dom';
 import './style.scss';
-import Header from '../../components/Header/header';
 import Footer from '../../components/Footer/footer';
 import { alertToastError, alertToastWarning } from '../../components/Toast/toast.';
 import {ToastContainer} from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+    const navigate = useNavigate();
+
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
     const handlePasswordVisibility = () => {
@@ -33,7 +35,8 @@ const Login = () => {
         if (loginData.email && loginData.password) {
             return await login(loginData).then((response: any) => {
                 if (response.success) {
-                    return ;
+                    localStorage.setItem("token", response.token);
+                    return navigate('/home');
                 }
                 return alertToastError("E-mail ou senha incorretos");
             });
@@ -43,7 +46,6 @@ const Login = () => {
 
     return (
         <>
-            <Header/>
             <Container fluid className="container login-container">
                 <div className='img-field img-login-field'>
                     <Image className='w-75 img-login' src='/assets/login.svg' />
