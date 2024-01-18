@@ -7,7 +7,6 @@ import {
     Row,
     Col,
     Badge,
-    Table,
     Button,
     ListGroup
 } from 'react-bootstrap';
@@ -17,6 +16,8 @@ import Chart from 'react-google-charts';
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import {FaTrash} from 'react-icons/fa';
 import { MdOutlineEdit } from "react-icons/md";
+import { User } from '../../interfaces/user.interface';
+import Footer from '../../components/Footer/footer';
 
 const Home = () => {
     const today: Date = new Date();
@@ -54,7 +55,7 @@ const Home = () => {
     let totalPendingSpents: number = 0;
     let totalPaidSpents: number = 0;
 
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [spents, setSpents] = useState<any>(null);
 
     const spentsMock: any[] = [
@@ -225,6 +226,7 @@ const Home = () => {
                     </ListGroup>
                 </Row>
             </Container>
+            <Footer />
         </>
     );
 }

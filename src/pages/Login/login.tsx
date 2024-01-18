@@ -6,8 +6,7 @@ import { login } from '../../services/user';
 import { Link } from 'react-router-dom';
 import './style.scss';
 import Footer from '../../components/Footer/footer';
-import { alertToastError, alertToastWarning } from '../../components/Toast/toast.';
-import {ToastContainer} from 'react-toastify';
+import { alertToastError, alertToastWarning } from '../../components/Toast/toast';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -75,7 +74,6 @@ const Login = () => {
                     </Form>
                 </div>
             </Container>
-            <ToastContainer />
             <Footer/>
         </>
     );

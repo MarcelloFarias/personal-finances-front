@@ -3,15 +3,14 @@ import { Container, Button, Form, Image } from 'react-bootstrap';
 import './style.scss';
 import { BiUserPlus } from "react-icons/bi";
 import { Link } from 'react-router-dom';
-import { IUserData } from '../../interfaces/user.interface';
+import { IUserRegistration } from '../../interfaces/user.interface';
 import { registerUser } from '../../services/user';
 import { PiEye, PiEyeClosedDuotone } from "react-icons/pi";
 import Footer from '../../components/Footer/footer';
-import { ToastContainer } from 'react-toastify';
-import { alertToastError, alertToastSuccess, alertToastWarning } from '../../components/Toast/toast.';
+import { alertToastError, alertToastSuccess, alertToastWarning } from '../../components/Toast/toast';
 
 const Signup = () => {
-    const [userData, setUserData] = useState<IUserData>({
+    const [userData, setUserData] = useState<IUserRegistration>({
         name: '',
         email: '',
         password: ''
@@ -94,7 +93,6 @@ const Signup = () => {
                     <Image className="w-75 img-signup" src='/assets/welcome_cats.svg' />
                 </div>
             </Container>
-            <ToastContainer/>
             <Footer/>
         </>
     );
