@@ -24,3 +24,14 @@ export const registerSpent = async (newSpent: ISpentRegistration) => {
         console.log('Fail to register a spent...', error);
     }
 }
+
+export const deleteSpent = async (spentId: number) => {
+    try {
+        const response = await axios.delete(`${baseUrl}/deleteSpent/${spentId}`);
+        console.log(response.data);
+        return response.data;
+    }
+    catch(error) {
+        console.log('Fail to delete spent...', error);
+    }
+}

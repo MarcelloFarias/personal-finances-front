@@ -20,6 +20,7 @@ import { User } from '../../interfaces/user.interface';
 import Footer from '../../components/Footer/footer';
 import { Link } from 'react-router-dom';
 import { Spent } from '../../interfaces/spent.interface';
+import DeleteSpentModal from '../../components/DeleteSpentModal/deleteSpentModal';
 
 const Home = () => {
     const today: Date = new Date();
@@ -71,7 +72,6 @@ const Home = () => {
                         return setSpents(response?.spents);
                     }
                 });
-
                 return setUser(response?.user);
             }
         });
@@ -127,6 +127,17 @@ const Home = () => {
         else {
             return;
         }
+    }
+
+    const [isDeleteSpentModalVisible, setIsDeleteSpentModalVisible] = useState<boolean>(false);
+
+    const handleDeleteSpentModalVisibility = () => setIsDeleteSpentModalVisible(!isDeleteSpentModalVisible);
+
+    const [spentIdToDelete, setSpentIdToDelete] = useState<number>(0);
+
+    const handleSpentIdToDelete = (spentId: number) => {
+        setSpentIdToDelete(spentId);
+        handleDeleteSpentModalVisibility();
     }
 
     return (
@@ -204,7 +215,7 @@ const Home = () => {
                                                     <Button variant='outline-warning' className='me-2'>
                                                         <MdOutlineEdit />
                                                     </Button>
-                                                    <Button variant='danger'>
+                                                    <Button variant='danger' onClick={() => handleSpentIdToDelete(spent?.id)}>
                                                         <FaTrash />
                                                     </Button>
                                                 </div>
@@ -220,6 +231,12 @@ const Home = () => {
                 </Row>
             </Container>
             <Footer />
+
+            <DeleteSpentModal 
+                isVisible={isDeleteSpentModalVisible} 
+                toggleVisibility={handleDeleteSpentModalVisibility} 
+                spentId={spentIdToDelete}
+            />
         </>
     );
 }

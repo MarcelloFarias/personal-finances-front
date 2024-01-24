@@ -43,7 +43,7 @@ const RegisterSpent = () => {
 
             return await registerSpent(spentData).then((response: any) => {
                 if(response?.success) {
-                    return alertToastSuccess(response?.message);
+                    return alertToastSuccess("Gasto registrado com sucesso !");
                 }
                 return alertToastError(response?.message);
             }).then(() => {
