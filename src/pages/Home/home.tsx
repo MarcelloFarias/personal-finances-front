@@ -19,6 +19,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { User } from '../../interfaces/user.interface';
 import Footer from '../../components/Footer/footer';
 import { Link } from 'react-router-dom';
+import { Spent } from '../../interfaces/spent.interface';
 
 const Home = () => {
     const today: Date = new Date();
@@ -55,7 +56,7 @@ const Home = () => {
     }
 
     const [user, setUser] = useState<User | null>(null);
-    const [spents, setSpents] = useState<any>([]);
+    const [spents, setSpents] = useState<Spent[]>([]);
     const [totalSpents, setTotalSpents] = useState<number>(0);
     const [totalPendingSpents, setTotalPendingSpents] = useState<number>(0);
     const [totalPaidSpents, setTotalPaidSpents] = useState<number>(0);
