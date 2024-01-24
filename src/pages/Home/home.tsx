@@ -14,10 +14,11 @@ import { getUser } from '../../services/user';
 import { getSpentByUserId } from '../../services/spent';
 import Chart from 'react-google-charts';
 import { IoIosInformationCircleOutline } from "react-icons/io";
-import {FaTrash} from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
 import { MdOutlineEdit } from "react-icons/md";
 import { User } from '../../interfaces/user.interface';
 import Footer from '../../components/Footer/footer';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
     const today: Date = new Date();
@@ -48,79 +49,56 @@ const Home = () => {
                 return 'novembro';
             case 11:
                 return 'dezembro';
+            default:
+                return '';
         }
     }
 
-    let totalSpents: number = 0;
-    let totalPendingSpents: number = 0;
-    let totalPaidSpents: number = 0;
-
     const [user, setUser] = useState<User | null>(null);
-    const [spents, setSpents] = useState<any>(null);
-
-    const spentsMock: any[] = [
-        {
-            id: 1,
-            name: 'Spotify',
-            paymentMonthDay: 5,
-            value: 34.90,
-            status: 'pendente'
-        },
-        {
-            id: 2,
-            name: 'Meli+',
-            paymentMonthDay: 10,
-            value: 17.99,
-            status: 'pendente'
-        },
-        {
-            id: 3,
-            name: 'HBO',
-            paymentMonthDay: 10,
-            value: 35,
-            status: 'pago'
-        },
-    ];
+    const [spents, setSpents] = useState<any>([]);
+    const [totalSpents, setTotalSpents] = useState<number>(0);
+    const [totalPendingSpents, setTotalPendingSpents] = useState<number>(0);
+    const [totalPaidSpents, setTotalPaidSpents] = useState<number>(0);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
 
         getUser(token).then((response: any) => {
-            if (response.success) {
-                return setUser(response.user);
-            }
-        }).then(() => {
-            if (user?.id) {
-                getSpentByUserId(user?.id).then((response: any) => {
+            if (response?.success) {
+                getSpentByUserId(response?.user.id).then((response: any) => {
                     if (response.success) {
-                        return setSpents(response.spents);
+                        return setSpents(response?.spents);
                     }
                 });
+
+                return setUser(response?.user);
             }
         });
     }, []);
 
     const chartData: Array<any> = new Array(["Gasto", "Valor"]);
 
-    spentsMock.forEach((spent: any) => {
+    spents.forEach((spent: any) => {
         return chartData.push([spent.name, spent.value]);
     });
 
-    spentsMock.forEach((spent: any) => {
-        return totalSpents += spent.value;
-    });
-
-    spentsMock.forEach((spent: any) => {
-        if (spent.status === 'pendente') {
-            return totalPendingSpents += spent.value;
-        }
-    });
-
-    spentsMock.forEach((spent: any) => {
-        if (spent.status === 'pago') {
-            return totalPaidSpents += spent.value;
-        }
-    });
+    useEffect(() => {
+        spents.forEach((spent: any) => {
+            return setTotalSpents((prevValue) => prevValue += spent.value);
+        });
+    
+        spents.forEach((spent: any) => {
+            if (spent.status === 'pendente') {
+                return setTotalPendingSpents((prevValue) => prevValue += spent.value);
+            }
+        });
+    
+        spents.forEach((spent: any) => {
+            if (spent.status === 'pago') {
+                return setTotalPaidSpents((prevValue) => prevValue += spent.value);
+            }
+        });
+    }, [spents.length]);
 
     const chartOptions: any = {
         title: `Meus gastos de ${getCurrentMonth()}`,
@@ -130,20 +108,23 @@ const Home = () => {
         if (status === 'pendente') {
             return (
                 <Badge bg='danger'>
-                    {spentsMock?.filter((spent: any) => {
+                    {spents?.filter((spent: any) => {
                         return spent.status && spent.status === status;
                     }).length}
                 </Badge>
             );
         }
-        if(status === 'pago') {
+        else if (status === 'pago') {
             return (
-                <Badge bg='danger'>
-                    {spentsMock?.filter((spent: any) => {
+                <Badge bg='primary'>
+                    {spents?.filter((spent: any) => {
                         return spent.status && spent.status === status;
                     }).length}
                 </Badge>
             );
+        }
+        else {
+            return;
         }
     }
 
@@ -162,7 +143,7 @@ const Home = () => {
                 </Row>
                 <Row>
                     <Col md={4}>
-                        <Card className='p-3 dashboard-card border border-info'>
+                        <Card className='p-3 dashboard-card'>
                             <Card.Title>
                                 <p>Total de gastos</p>
                             </Card.Title>
@@ -172,7 +153,7 @@ const Home = () => {
                         </Card>
                     </Col>
                     <Col md={4}>
-                        <Card className='p-3 border border-warning dashboard-card'>
+                        <Card className='p-3 dashboard-card'>
                             <Card.Title className='d-flex align-items-center justify-content-between'>
                                 <p>Gastos pendentes</p>
                                 {getSpentStatusAmount('pendente')}
@@ -183,7 +164,7 @@ const Home = () => {
                         </Card>
                     </Col>
                     <Col md={4}>
-                        <Card className='p-3 border border-success dashboard-card'>
+                        <Card className='p-3 dashboard-card'>
                             <Card.Title className='d-flex align-items-center justify-content-between'>
                                 <p>Gastos pagos</p>
                                 {getSpentStatusAmount('pago')}
@@ -195,35 +176,46 @@ const Home = () => {
                     </Col>
                 </Row>
                 <Row className='mt-5'>
-                    <div className='d-flex justify-content-between mb-3'>
+                    <div className='spent-list-title d-flex justify-content-between mb-3'>
                         <h2>Todos os meus gastos</h2>
-                        <Button variant='success'>Registrar um gasto</Button>
+                        <Link to={`/spent/register/${user?.id}`}>
+                            <Button variant='success'>Registrar um gasto</Button>
+                        </Link>
                     </div>
-                    <ListGroup className='border-0'>
-                        {spentsMock.map((spent: any) => {
-                            return (
-                                <ListGroup.Item key={spent.id} className='border-0'>
-                                    <Card className='p-3'>
-                                        <Card.Title>{spent.name} <Badge bg={spent.status === 'pago' ? 'success' : 'warning'}>{spent.status}</Badge></Card.Title>
-                                        <Card.Body className='d-flex align-items-center justify-content-between'>
-                                            <h3>R$ {spent.value}</h3>
-                                            <div>
-                                                <Button variant='info' className='me-2'>
-                                                    <IoIosInformationCircleOutline/>
+                    {spents?.length > 0 ? (
+                        <ListGroup className='border-0'>
+                            {spents?.map((spent: any) => {
+                                return (
+                                    <ListGroup.Item key={spent.id} className='border-0'>
+                                        <Card className='p-3'>
+                                            <Card.Title className='d-flex align-items-center justify-content-between'>
+                                                <div className='d-flex align-items-center'>
+                                                    {spent.name}
+                                                    <Badge bg={spent.status === 'pago' ? 'success' : 'warning'} className='ms-2'>{spent.status}</Badge>
+                                                </div>
+                                                <Button variant='' className='text-info fs-4'>
+                                                    <IoIosInformationCircleOutline />
                                                 </Button>
-                                                <Button variant='warning' className='me-2'>
-                                                    <MdOutlineEdit/>
-                                                </Button>
-                                                <Button variant='danger'>
-                                                    <FaTrash/>
-                                                </Button>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
-                                </ListGroup.Item>
-                            );
-                        })}
-                    </ListGroup>
+                                            </Card.Title>
+                                            <Card.Body className='d-flex align-items-center justify-content-between'>
+                                                <h3>R$ {spent.value.toString().replace('.', ',')}</h3>
+                                                <div>
+                                                    <Button variant='outline-warning' className='me-2'>
+                                                        <MdOutlineEdit />
+                                                    </Button>
+                                                    <Button variant='danger'>
+                                                        <FaTrash />
+                                                    </Button>
+                                                </div>
+                                            </Card.Body>
+                                        </Card>
+                                    </ListGroup.Item>
+                                );
+                            })}
+                        </ListGroup>
+                    ) : (
+                        <p className='text-center mt-4'>Você ainda não possui gastos registrados</p>
+                    )}
                 </Row>
             </Container>
             <Footer />
