@@ -19,6 +19,7 @@ import Footer from '../../components/Footer/footer';
 import { Spent } from '../../interfaces/spent.interface';
 import DeleteSpentModal from '../../components/DeleteSpentModal/deleteSpentModal';
 import RegisterSpentModal from '../../components/RegisterSpentModal/registerSpentModal';
+import UpdateSpentModal from '../../components/UpdateSpentModal/updateSpentModal';
 
 const Home = () => {
     const today: Date = new Date();
@@ -98,6 +99,17 @@ const Home = () => {
 
     const handleRegisterSpentModalVisibility = () => setIsRegisterSpentModalVisible(!isRegisterSpentModalVisible);
 
+    const [isUpdateSpentModalVisible, setIsUpdateSpentModalVisible] = useState<boolean>(false);
+
+    const handleUpdateSpentModalVisibility = () => setIsUpdateSpentModalVisible(!isUpdateSpentModalVisible);
+
+    const [spentIdToUpdate, setSpentIdToUpdate] = useState<number>(0);
+
+    const handleSpentIdToUpdate = (spentId: number) => {
+        setSpentIdToUpdate(spentId);
+        handleUpdateSpentModalVisibility();
+    }
+
     return (
         <>
             <Header />
@@ -135,7 +147,7 @@ const Home = () => {
                                             <Card.Body className='d-flex align-items-center justify-content-between'>
                                                 <h3>R$ {spent.value.toString().replace('.', ',')}</h3>
                                                 <div>
-                                                    <Button variant='outline-warning' className='me-2'>
+                                                    <Button variant='outline-warning' className='me-2' onClick={() => handleSpentIdToUpdate(spent?.id)}>
                                                         <MdOutlineEdit />
                                                     </Button>
                                                     <Button variant='danger' onClick={() => handleSpentIdToDelete(spent?.id)}>
@@ -166,6 +178,13 @@ const Home = () => {
             <RegisterSpentModal
                 isVisible={isRegisterSpentModalVisible}
                 toggleVisibility={handleRegisterSpentModalVisibility}
+                setSpents={setSpents}
+            />
+
+            <UpdateSpentModal 
+                isVisible={isUpdateSpentModalVisible}
+                toggleVisibility={handleUpdateSpentModalVisibility}
+                spentId={spentIdToUpdate}
                 setSpents={setSpents}
             />
         </>
