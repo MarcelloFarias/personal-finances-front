@@ -20,6 +20,7 @@ import { Spent } from '../../interfaces/spent.interface';
 import DeleteSpentModal from '../../components/DeleteSpentModal/deleteSpentModal';
 import RegisterSpentModal from '../../components/RegisterSpentModal/registerSpentModal';
 import UpdateSpentModal from '../../components/UpdateSpentModal/updateSpentModal';
+import SpentDetailsModal from '../../components/SpentDetailsModal/spentDetailsModal';
 
 const Home = () => {
     const today: Date = new Date();
@@ -110,6 +111,17 @@ const Home = () => {
         handleUpdateSpentModalVisibility();
     }
 
+    const [isSpentDetailsModalVisible, setIsSpentDetailsModalVisible] = useState<boolean>(false);
+
+    const handleSpentDetailsModalVisibility = () => setIsSpentDetailsModalVisible(!isSpentDetailsModalVisible);
+
+    const [spentIdToDetails, setSpentIdToDetails] = useState<number>(0);
+
+    const handleSpentIdToDetails = (spentId: number) => {
+        setSpentIdToDetails(spentId);
+        handleSpentDetailsModalVisibility();
+    }
+
     return (
         <>
             <Header />
@@ -140,7 +152,7 @@ const Home = () => {
                                                     {spent.name}
                                                     <Badge bg={spent.status === 'pago' ? 'success' : 'warning'} className='ms-2'>{spent.status}</Badge>
                                                 </div>
-                                                <Button variant='' className='text-info fs-4'>
+                                                <Button variant='' className='text-info fs-4' onClick={() => handleSpentIdToDetails(spent?.id)}>
                                                     <IoIosInformationCircleOutline />
                                                 </Button>
                                             </Card.Title>
@@ -186,6 +198,12 @@ const Home = () => {
                 toggleVisibility={handleUpdateSpentModalVisibility}
                 spentId={spentIdToUpdate}
                 setSpents={setSpents}
+            />
+
+            <SpentDetailsModal 
+                isVisible={isSpentDetailsModalVisible}
+                toggleVisibility={handleSpentDetailsModalVisibility}
+                spentId={spentIdToDetails}
             />
         </>
     );
