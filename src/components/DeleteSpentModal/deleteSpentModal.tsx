@@ -1,24 +1,29 @@
 import { Modal, Button } from "react-bootstrap";
 import { deleteSpent } from "../../services/spent";
 import { alertToastError, alertToastSuccess } from "../Toast/toast";
+import { Spent } from "../../interfaces/spent.interface";
 
 interface DeleteSpentModalProps {
     isVisible: boolean,
     toggleVisibility: () => void,
-    spentId: number
+    spentId: number,
+    setSpents: any,
+    spents: Spent[]
 }
 
-const DeleteSpentModal = ({isVisible, toggleVisibility, spentId}: DeleteSpentModalProps) => {
+const DeleteSpentModal = ({isVisible, toggleVisibility, spentId, setSpents, spents}: DeleteSpentModalProps) => {
 
     async function removeSpent() {
         if(spentId) {
             return await deleteSpent(spentId).then((response) => {
                 if(response?.success) {
                     alertToastSuccess('Gasto excluído com sucesso !');
-                    toggleVisibility();
-                    return setTimeout(() => {
-                        window.location.reload();
-                    }, 3000);
+
+                    setSpents(spents.filter((spent: any) => {
+                        return spent && spent.id !== spentId;
+                    }));
+
+                    return toggleVisibility();
                 }
                 return alertToastError(response?.message);
             });
@@ -27,7 +32,7 @@ const DeleteSpentModal = ({isVisible, toggleVisibility, spentId}: DeleteSpentMod
 
     return (
         <Modal show={isVisible} onHide={toggleVisibility}>
-            <Modal.Header>
+            <Modal.Header closeButton>
                 <Modal.Title>Excluir um gasto</Modal.Title>
             </Modal.Header>
             <Modal.Body>

@@ -5,7 +5,6 @@ import {
     Card,
     Container,
     Row,
-    Col,
     Badge,
     Button,
     ListGroup
@@ -16,11 +15,10 @@ import Chart from 'react-google-charts';
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { FaTrash } from 'react-icons/fa';
 import { MdOutlineEdit } from "react-icons/md";
-import { User } from '../../interfaces/user.interface';
 import Footer from '../../components/Footer/footer';
-import { Link } from 'react-router-dom';
 import { Spent } from '../../interfaces/spent.interface';
 import DeleteSpentModal from '../../components/DeleteSpentModal/deleteSpentModal';
+import RegisterSpentModal from '../../components/RegisterSpentModal/registerSpentModal';
 
 const Home = () => {
     const today: Date = new Date();
@@ -56,25 +54,23 @@ const Home = () => {
         }
     }
 
-    const [user, setUser] = useState<User | null>(null);
     const [spents, setSpents] = useState<Spent[]>([]);
-    const [totalSpents, setTotalSpents] = useState<number>(0);
-    const [totalPendingSpents, setTotalPendingSpents] = useState<number>(0);
-    const [totalPaidSpents, setTotalPaidSpents] = useState<number>(0);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
 
-        getUser(token).then((response: any) => {
-            if (response?.success) {
-                getSpentByUserId(response?.user.id).then((response: any) => {
-                    if (response.success) {
-                        return setSpents(response?.spents);
-                    }
-                });
-                return setUser(response?.user);
-            }
-        });
+        if (token) {
+            getUser(token).then((response: any) => {
+                if (response?.success) {
+                    getSpentByUserId(response?.user.id).then((response: any) => {
+                        if (response.success) {
+                            setSpents(response?.spents);
+                        }
+                    });
+                    localStorage.setItem('id', response?.user.id.toString());
+                }
+            });
+        }
     }, []);
 
     const chartData: Array<any> = new Array(["Gasto", "Valor"]);
@@ -83,51 +79,9 @@ const Home = () => {
         return chartData.push([spent.name, spent.value]);
     });
 
-    useEffect(() => {
-        spents.forEach((spent: any) => {
-            return setTotalSpents((prevValue) => prevValue += spent.value);
-        });
-    
-        spents.forEach((spent: any) => {
-            if (spent.status === 'pendente') {
-                return setTotalPendingSpents((prevValue) => prevValue += spent.value);
-            }
-        });
-    
-        spents.forEach((spent: any) => {
-            if (spent.status === 'pago') {
-                return setTotalPaidSpents((prevValue) => prevValue += spent.value);
-            }
-        });
-    }, [spents.length]);
-
     const chartOptions: any = {
         title: `Meus gastos de ${getCurrentMonth()}`,
     };
-
-    const getSpentStatusAmount = (status: string) => {
-        if (status === 'pendente') {
-            return (
-                <Badge bg='danger'>
-                    {spents?.filter((spent: any) => {
-                        return spent.status && spent.status === status;
-                    }).length}
-                </Badge>
-            );
-        }
-        else if (status === 'pago') {
-            return (
-                <Badge bg='primary'>
-                    {spents?.filter((spent: any) => {
-                        return spent.status && spent.status === status;
-                    }).length}
-                </Badge>
-            );
-        }
-        else {
-            return;
-        }
-    }
 
     const [isDeleteSpentModalVisible, setIsDeleteSpentModalVisible] = useState<boolean>(false);
 
@@ -139,6 +93,10 @@ const Home = () => {
         setSpentIdToDelete(spentId);
         handleDeleteSpentModalVisibility();
     }
+
+    const [isRegisterSpentModalVisible, setIsRegisterSpentModalVisible] = useState<boolean>(false);
+
+    const handleRegisterSpentModalVisibility = () => setIsRegisterSpentModalVisible(!isRegisterSpentModalVisible);
 
     return (
         <>
@@ -153,46 +111,11 @@ const Home = () => {
                         options={chartOptions}
                     />
                 </Row>
-                <Row>
-                    <Col md={4}>
-                        <Card className='p-3 dashboard-card'>
-                            <Card.Title>
-                                <p>Total de gastos</p>
-                            </Card.Title>
-                            <Card.Body>
-                                <Card.Text className='fs-3'>R$ {totalSpents.toFixed(2).toString().replace('.', ',')}</Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col md={4}>
-                        <Card className='p-3 dashboard-card'>
-                            <Card.Title className='d-flex align-items-center justify-content-between'>
-                                <p>Gastos pendentes</p>
-                                {getSpentStatusAmount('pendente')}
-                            </Card.Title>
-                            <Card.Body>
-                                <Card.Text className='fs-3'> R$ {totalPendingSpents.toFixed(2).toString().replace('.', ',')}</Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col md={4}>
-                        <Card className='p-3 dashboard-card'>
-                            <Card.Title className='d-flex align-items-center justify-content-between'>
-                                <p>Gastos pagos</p>
-                                {getSpentStatusAmount('pago')}
-                            </Card.Title>
-                            <Card.Body>
-                                <Card.Text className='fs-3'>R$ {totalPaidSpents.toFixed(2).toString().replace('.', ',')}</Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
+            
                 <Row className='mt-5'>
                     <div className='spent-list-title d-flex justify-content-between mb-3'>
                         <h2>Todos os meus gastos</h2>
-                        <Link to={`/spent/register/${user?.id}`}>
-                            <Button variant='success'>Registrar um gasto</Button>
-                        </Link>
+                        <Button variant='success' onClick={handleRegisterSpentModalVisibility}>Registrar um gasto</Button>
                     </div>
                     {spents?.length > 0 ? (
                         <ListGroup className='border-0'>
@@ -232,10 +155,18 @@ const Home = () => {
             </Container>
             <Footer />
 
-            <DeleteSpentModal 
-                isVisible={isDeleteSpentModalVisible} 
-                toggleVisibility={handleDeleteSpentModalVisibility} 
+            <DeleteSpentModal
+                isVisible={isDeleteSpentModalVisible}
+                toggleVisibility={handleDeleteSpentModalVisibility}
                 spentId={spentIdToDelete}
+                setSpents={setSpents}
+                spents={spents}
+            />
+
+            <RegisterSpentModal
+                isVisible={isRegisterSpentModalVisible}
+                toggleVisibility={handleRegisterSpentModalVisibility}
+                setSpents={setSpents}
             />
         </>
     );
