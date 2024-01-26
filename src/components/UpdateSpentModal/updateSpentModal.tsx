@@ -66,7 +66,7 @@ const UpdateSpentModal = ({isVisible, toggleVisibility, spentId, setSpents}: Upd
                         });
                     }
 
-                    return alertToastSuccess(response?.message);
+                    return alertToastSuccess("Gasto editado com sucesso !");
                 }
                 return alertToastError(response?.message);
             });
