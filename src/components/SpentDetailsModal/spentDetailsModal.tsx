@@ -29,7 +29,7 @@ const SpentDetailsModal = ({isVisible, toggleVisibility, spentId}: SpentDetailsM
                 }
             });
         }   
-    }, [spentId]);
+    }, [spentId, spent]);
 
     function formatDate(date: any) {
         date.replace(':', '').replace('T', '');
@@ -50,7 +50,7 @@ const SpentDetailsModal = ({isVisible, toggleVisibility, spentId}: SpentDetailsM
             </Modal.Header>
             <Modal.Body>
                 <p>Dia de pagamento: {spent.paymentMonthDay}</p>
-                <p>Valor: R$ {spent.value}</p>
+                <p>Valor: R$ {spent.value.toString().replace('.', ',')}</p>
                 <p>Status: <span className={spent.status === 'pago' ? 'text-success' : 'text-warning'}>{spent.status}</span></p>
                 <p>Criado em {formatDate(spent.createdAt)}</p>
                 <p>Atualizado em {formatDate(spent.updatedAt)}</p>

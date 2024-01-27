@@ -22,6 +22,7 @@ import RegisterSpentModal from '../../components/RegisterSpentModal/registerSpen
 import UpdateSpentModal from '../../components/UpdateSpentModal/updateSpentModal';
 import SpentDetailsModal from '../../components/SpentDetailsModal/spentDetailsModal';
 import LogoutModal from '../../components/LogoutModal/logoutModal';
+import PersonalDataModal from '../../components/PersonalDataModal/personalDataModal';
 
 const Home = () => {
     const today: Date = new Date();
@@ -127,10 +128,15 @@ const Home = () => {
 
     const handleLogoutModalVisibility = () => setIsLogoutModalVisible(!isLogoutModalVisible);
 
+    const [isPersonalDataModalVisible, setIsPersonalDataModalVisible] = useState<boolean>(false);
+
+    const handlePersonalDataModalVisibility = () => setIsPersonalDataModalVisible(!isPersonalDataModalVisible);
+
     return (
         <>
             <Header 
                 toggleLogoutModalVisibility={handleLogoutModalVisibility}
+                togglePersonalDataModalVisibility={handlePersonalDataModalVisibility}
             />
 
             <Container className='container mb-5'>
@@ -217,6 +223,11 @@ const Home = () => {
             <LogoutModal 
                 isVisible={isLogoutModalVisible}
                 toggleVisibility={handleLogoutModalVisibility}
+            />
+
+            <PersonalDataModal 
+                isVisible={isPersonalDataModalVisible}
+                toggleVisibility={handlePersonalDataModalVisibility}
             />
         </>
     );

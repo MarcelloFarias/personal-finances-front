@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Modal, Button, Form, InputGroup } from 'react-bootstrap';
 import { ISpentRegistration } from '../../interfaces/spent.interface';
 import { alertToastError, alertToastSuccess, alertToastWarning } from '../Toast/toast';
@@ -14,23 +14,12 @@ interface RegisterSpentModalProps {
 const RegisterSpentModal = ({ isVisible, toggleVisibility, setSpents }: RegisterSpentModalProps) => {
     const monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
 
-    const userId = useMemo(() => {
-        const id = localStorage.getItem('id');
-
-        if(typeof(id) === 'string') {
-            return parseInt(id);
-        }
-        else {
-            return 0;
-        }
-    }, [localStorage.getItem('id')]);
-
     const [spentData, setSpentData] = useState<ISpentRegistration>({
         name: '',
         paymentMonthDay: 1,
         value: 0,
         status: 'pendente',
-        idUser: userId
+        idUser: 0
     });
 
     const handleSpentData = (e: any) => {
@@ -38,7 +27,25 @@ const RegisterSpentModal = ({ isVisible, toggleVisibility, setSpents }: Register
             ...spentData,
             [e.target.name]: e.target.value.replace(',', '.')
         });
-    }
+    }  
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+
+        if(token) {
+            getUser(token).then((response) => {
+                if(response?.success) {
+                    setSpentData({
+                        name: '',
+                        paymentMonthDay: 1,
+                        value: 0,
+                        status: 'pendente',
+                        idUser: response?.user.id
+                    })
+                }
+            });
+        }
+    }, [localStorage.getItem('token')]);
 
     async function saveSpent() {
         if(spentData.name && spentData.paymentMonthDay && spentData.value && spentData.status) {
@@ -76,7 +83,7 @@ const RegisterSpentModal = ({ isVisible, toggleVisibility, setSpents }: Register
                     paymentMonthDay: 1,
                     value: 0,
                     status: 'pendente',
-                    idUser: userId
+                    idUser: 0
                 });
             });
         }

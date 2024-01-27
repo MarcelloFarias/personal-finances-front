@@ -3,10 +3,11 @@ import { FaUserCircle } from "react-icons/fa";
 import './style.scss';
 
 interface HeaderProps {
-    toggleLogoutModalVisibility: () => void
+    toggleLogoutModalVisibility: () => void,
+    togglePersonalDataModalVisibility: () => void
 }
 
-const Header = ({toggleLogoutModalVisibility}: HeaderProps) => {
+const Header = ({toggleLogoutModalVisibility, togglePersonalDataModalVisibility}: HeaderProps) => {
     return (
         <Navbar className="header">
             <Container style={{height: "10vh"}} className="d-flex">
@@ -21,7 +22,7 @@ const Header = ({toggleLogoutModalVisibility}: HeaderProps) => {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            <Dropdown.Item>Dados pessoais</Dropdown.Item>
+                            <Dropdown.Item onClick={togglePersonalDataModalVisibility}>Dados pessoais</Dropdown.Item>
                             <Dropdown.Item className="text-danger" onClick={toggleLogoutModalVisibility}>Sair</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>

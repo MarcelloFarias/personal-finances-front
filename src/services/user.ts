@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { IUserData } from '../interfaces/user.interface';
+import { IUserRegistration } from '../interfaces/user.interface';
 
-const baseUrl = 'http://localhost:8080';
+const baseUrl = 'http://192.168.0.107:8080';
 
 export const login = async (userLoginData: any) => {
     try {
@@ -29,7 +29,7 @@ export const getUser = async (userToken: any) => {
     }
 }
 
-export const registerUser = async (userData: IUserData) => {
+export const registerUser = async (userData: IUserRegistration) => {
     try {
         const response = await axios.post(`${baseUrl}/createUser`, userData);
         console.log(response.data);
@@ -37,5 +37,27 @@ export const registerUser = async (userData: IUserData) => {
     }
     catch(error) {
         console.log("Fail to register user: ", error);
+    }
+}
+
+export const updateUserPersonalData = async (userId: number, newData: any) => {
+    try {
+        const response = await axios.put(`${baseUrl}/updateUserPersonalData/${userId}`, newData);
+        console.log(response.data);
+        return response.data;
+    }
+    catch(error) {
+        console.log('Fail to update user...', error);
+    }
+}
+
+export const updateUserPassword = async (userId: number, newData: any) => {
+    try {
+        const response = await axios.put(`${baseUrl}/updatePassword/${userId}`, newData);
+        console.log(response.data);
+        return response.data;
+    }
+    catch(error) {
+        console.log('Fail to update user...', error);
     }
 }
