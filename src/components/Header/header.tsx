@@ -1,8 +1,12 @@
-import { Navbar, Container, Nav, Button } from "react-bootstrap";
+import { Navbar, Container, Nav, Dropdown } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 import './style.scss';
 
-const Header = ({toggleSideMenuVisibility}: any) => {
+interface HeaderProps {
+    toggleLogoutModalVisibility: () => void
+}
+
+const Header = ({toggleLogoutModalVisibility}: HeaderProps) => {
     return (
         <Navbar className="header">
             <Container style={{height: "10vh"}} className="d-flex">
@@ -11,9 +15,16 @@ const Header = ({toggleSideMenuVisibility}: any) => {
                 </Navbar.Brand>
 
                 <Nav>
-                    <Button variant="" className="fs-1" onClick={toggleSideMenuVisibility}>
-                        <FaUserCircle/>
-                    </Button>
+                    <Dropdown drop="start">
+                        <Dropdown.Toggle variant="" className="fs-2 d-flex align-items-center border-0">
+                            <FaUserCircle/>
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                            <Dropdown.Item>Dados pessoais</Dropdown.Item>
+                            <Dropdown.Item className="text-danger" onClick={toggleLogoutModalVisibility}>Sair</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </Nav>
             </Container>
         </Navbar>

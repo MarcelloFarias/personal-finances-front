@@ -21,7 +21,7 @@ import DeleteSpentModal from '../../components/DeleteSpentModal/deleteSpentModal
 import RegisterSpentModal from '../../components/RegisterSpentModal/registerSpentModal';
 import UpdateSpentModal from '../../components/UpdateSpentModal/updateSpentModal';
 import SpentDetailsModal from '../../components/SpentDetailsModal/spentDetailsModal';
-import SideMenu from '../../components/SideMenu/sideMenu';
+import LogoutModal from '../../components/LogoutModal/logoutModal';
 
 const Home = () => {
     const today: Date = new Date();
@@ -123,14 +123,16 @@ const Home = () => {
         handleSpentDetailsModalVisibility();
     }
 
-    const [isSideMenuVisible, setIsSideMenuVisible] = useState<boolean>(false);
+    const [isLogoutModalVisible, setIsLogoutModalVisible] = useState<boolean>(false);
 
-    const handleSideMenuVisibility = () => setIsSideMenuVisible(!isSideMenuVisible);
+    const handleLogoutModalVisibility = () => setIsLogoutModalVisible(!isLogoutModalVisible);
 
     return (
         <>
-            <Header toggleSideMenuVisibility={handleSideMenuVisibility} />
-            
+            <Header 
+                toggleLogoutModalVisibility={handleLogoutModalVisibility}
+            />
+
             <Container className='container mb-5'>
                 <Row>
                     <Chart
@@ -212,9 +214,9 @@ const Home = () => {
                 spentId={spentIdToDetails}
             />
 
-            <SideMenu 
-                isVisible={isSideMenuVisible}
-                toggleVisibility={handleSideMenuVisibility}
+            <LogoutModal 
+                isVisible={isLogoutModalVisible}
+                toggleVisibility={handleLogoutModalVisibility}
             />
         </>
     );
