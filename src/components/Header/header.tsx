@@ -1,7 +1,8 @@
-import { Navbar, Container, Nav } from "react-bootstrap";
+import { Navbar, Container, Nav, Button } from "react-bootstrap";
+import { FaUserCircle } from "react-icons/fa";
 import './style.scss';
 
-const Header = () => {
+const Header = ({toggleSideMenuVisibility}: any) => {
     return (
         <Navbar className="header">
             <Container style={{height: "10vh"}} className="d-flex">
@@ -10,7 +11,9 @@ const Header = () => {
                 </Navbar.Brand>
 
                 <Nav>
-                    <Nav.Link href="/home">Dashboard</Nav.Link>
+                    <Button variant="" className="fs-1" onClick={toggleSideMenuVisibility}>
+                        <FaUserCircle/>
+                    </Button>
                 </Nav>
             </Container>
         </Navbar>

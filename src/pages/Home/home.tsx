@@ -21,6 +21,7 @@ import DeleteSpentModal from '../../components/DeleteSpentModal/deleteSpentModal
 import RegisterSpentModal from '../../components/RegisterSpentModal/registerSpentModal';
 import UpdateSpentModal from '../../components/UpdateSpentModal/updateSpentModal';
 import SpentDetailsModal from '../../components/SpentDetailsModal/spentDetailsModal';
+import SideMenu from '../../components/SideMenu/sideMenu';
 
 const Home = () => {
     const today: Date = new Date();
@@ -122,10 +123,15 @@ const Home = () => {
         handleSpentDetailsModalVisibility();
     }
 
+    const [isSideMenuVisible, setIsSideMenuVisible] = useState<boolean>(false);
+
+    const handleSideMenuVisibility = () => setIsSideMenuVisible(!isSideMenuVisible);
+
     return (
         <>
-            <Header />
-            <Container className='container'>
+            <Header toggleSideMenuVisibility={handleSideMenuVisibility} />
+            
+            <Container className='container mb-5'>
                 <Row>
                     <Chart
                         chartType='PieChart'
@@ -204,6 +210,11 @@ const Home = () => {
                 isVisible={isSpentDetailsModalVisible}
                 toggleVisibility={handleSpentDetailsModalVisibility}
                 spentId={spentIdToDetails}
+            />
+
+            <SideMenu 
+                isVisible={isSideMenuVisible}
+                toggleVisibility={handleSideMenuVisibility}
             />
         </>
     );
