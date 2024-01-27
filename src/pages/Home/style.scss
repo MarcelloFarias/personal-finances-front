@@ -1,8 +1,14 @@
 @import '../../index.scss';
 
+.home-card-badge {
+    position: absolute;
+    right: -10px;
+    top: -10px;
+}
+
 @media(max-width: 767px) {
-    .dashboard-card {
-        margin-top: 15px;
+    .home-card {
+        margin-top: 20px;
     }
 
     .spent-list-title {

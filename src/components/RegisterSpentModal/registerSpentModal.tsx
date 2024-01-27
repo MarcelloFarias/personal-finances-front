@@ -9,9 +9,10 @@ interface RegisterSpentModalProps {
     isVisible: boolean,
     toggleVisibility: () => void,
     setSpents: any,
+    setDataAboutSpents: any,
 }
 
-const RegisterSpentModal = ({ isVisible, toggleVisibility, setSpents }: RegisterSpentModalProps) => {
+const RegisterSpentModal = ({ isVisible, toggleVisibility, setSpents, setDataAboutSpents }: RegisterSpentModalProps) => {
     const monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
 
     const [spentData, setSpentData] = useState<ISpentRegistration>({
@@ -25,50 +26,55 @@ const RegisterSpentModal = ({ isVisible, toggleVisibility, setSpents }: Register
     const handleSpentData = (e: any) => {
         setSpentData({
             ...spentData,
-            [e.target.name]: e.target.value.replace(',', '.')
+            [e.target.name]: e.target.value.replace(',', '.'),
         });
-    }  
+    }
 
     useEffect(() => {
         const token = localStorage.getItem('token');
 
-        if(token) {
+        if (token) {
             getUser(token).then((response) => {
-                if(response?.success) {
+                if (response?.success) {
                     setSpentData({
-                        name: '',
-                        paymentMonthDay: 1,
-                        value: 0,
-                        status: 'pendente',
+                        ...spentData,
                         idUser: response?.user.id
                     });
                 }
             });
         }
-    }, [localStorage.getItem('token')]);
+    }, []);
 
     async function saveSpent() {
-        if(spentData.name && spentData.paymentMonthDay && spentData.value && spentData.status) {
-            if(spentData.paymentMonthDay < 0 || spentData.paymentMonthDay > 31) {
+        if (spentData.name && spentData.paymentMonthDay && spentData.value && spentData.status) {
+            if (spentData.paymentMonthDay < 0 || spentData.paymentMonthDay > 31) {
                 return alertToastError('Dia de pagamento inválido ! Por Favor,  tente novamente...');
             }
-            if(spentData.value <= 0) {
+            if (spentData.value <= 0) {
                 return alertToastError('Valor do gasto inválido ! Por favor, tente novamente...');
             }
 
             return await registerSpent(spentData).then((response: any) => {
-                if(response?.success) {
+                if (response?.success) {
                     toggleVisibility();
 
                     const token = localStorage.getItem('token');
 
-                    if(token) {
+                    if (token) {
                         getUser(token).then((response) => {
-                            if(response?.success) {
+                            if (response?.success) {
                                 getSpentByUserId(response?.user.id).then((response) => {
-                                    if(response?.success) {
+                                    if (response?.success) {
                                         setSpents(response?.spents);
+                                        setDataAboutSpents(response?.data);
                                     }
+                                });
+                                setSpentData({
+                                    name: '',
+                                    paymentMonthDay: 1,
+                                    value: 0,
+                                    status: 'pendente',
+                                    idUser: response?.user.id
                                 });
                             }
                         });
@@ -77,14 +83,6 @@ const RegisterSpentModal = ({ isVisible, toggleVisibility, setSpents }: Register
                     return alertToastSuccess("Gasto registrado com sucesso !");
                 }
                 return alertToastError(response?.message);
-            }).then(() => {
-                setSpentData({
-                    name: '',
-                    paymentMonthDay: 1,
-                    value: 0,
-                    status: 'pendente',
-                    idUser: 0
-                });
             });
         }
         return alertToastWarning('Por favor, preencha todos os campos...');

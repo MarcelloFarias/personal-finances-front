@@ -5,6 +5,7 @@ import {
     Card,
     Container,
     Row,
+    Col,
     Badge,
     Button,
     ListGroup
@@ -16,7 +17,7 @@ import { IoIosInformationCircleOutline } from "react-icons/io";
 import { FaTrash } from 'react-icons/fa';
 import { MdOutlineEdit } from "react-icons/md";
 import Footer from '../../components/Footer/footer';
-import { Spent } from '../../interfaces/spent.interface';
+import { Spent, SpentAmounts } from '../../interfaces/spent.interface';
 import DeleteSpentModal from '../../components/DeleteSpentModal/deleteSpentModal';
 import RegisterSpentModal from '../../components/RegisterSpentModal/registerSpentModal';
 import UpdateSpentModal from '../../components/UpdateSpentModal/updateSpentModal';
@@ -59,6 +60,14 @@ const Home = () => {
     }
 
     const [spents, setSpents] = useState<Spent[]>([]);
+    const [dataAboutSpents, setDataAboutSpents] = useState<SpentAmounts>({
+        totalPaid: '',
+        totalPending: '',
+        totalSpents: '',
+        spentsAmount: 0,
+        paidAmount: 0,
+        pendingAmount: 0
+    });
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -69,9 +78,9 @@ const Home = () => {
                     getSpentByUserId(response?.user.id).then((response: any) => {
                         if (response.success) {
                             setSpents(response?.spents);
+                            setDataAboutSpents(response?.data);
                         }
                     });
-                    localStorage.setItem('id', response?.user.id.toString());
                 }
             });
         }
@@ -84,7 +93,7 @@ const Home = () => {
     });
 
     const chartOptions: any = {
-        title: `Meus gastos de ${getCurrentMonth()}`,
+        title: `Gastos para ${getCurrentMonth()}`,
     };
 
     const [isDeleteSpentModalVisible, setIsDeleteSpentModalVisible] = useState<boolean>(false);
@@ -134,7 +143,7 @@ const Home = () => {
 
     return (
         <>
-            <Header 
+            <Header
                 toggleLogoutModalVisibility={handleLogoutModalVisibility}
                 togglePersonalDataModalVisibility={handlePersonalDataModalVisibility}
             />
@@ -149,10 +158,54 @@ const Home = () => {
                         options={chartOptions}
                     />
                 </Row>
-            
+
+                <Row>
+                    <Col md={4}>
+                        <Card className='p-3 home-card'>
+                            <div className='home-card-badge'>
+                                <Badge bg='info' className='fs-4'>
+                                    {dataAboutSpents.spentsAmount}
+                                </Badge>
+                            </div>
+                            <Card.Title>Gastos Mensais</Card.Title>
+                            <Card.Body>
+                                <h3>R$ {dataAboutSpents.totalSpents}</h3>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+
+                    <Col md={4}>
+                        <Card className='p-3 home-card'>
+                            <div className='home-card-badge'>
+                                <Badge bg='warning' className='fs-4'>
+                                    {dataAboutSpents.pendingAmount}
+                                </Badge>
+                            </div>
+                            <Card.Title>Pendentes</Card.Title>
+                            <Card.Body>
+                                <h3>R$ {dataAboutSpents.totalPending}</h3>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+
+                    <Col md={4}>
+                        <Card className='p-3 home-card'>
+                            <div className='home-card-badge'>
+                                <Badge bg='success' className='fs-4'>
+                                    {dataAboutSpents.paidAmount}
+                                </Badge>
+                            </div>
+                            <Card.Title>Pagos</Card.Title>
+                            <Card.Body>
+                                <h3>R$ {dataAboutSpents.totalPaid}</h3>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+
                 <Row className='mt-5'>
                     <div className='spent-list-title d-flex justify-content-between mb-3'>
-                        <h2>Todos os meus gastos</h2>
+                        <h2>Meus gastos</h2>
                         <Button variant='success' onClick={handleRegisterSpentModalVisibility}>Registrar um gasto</Button>
                     </div>
                     {spents?.length > 0 ? (
@@ -198,33 +251,36 @@ const Home = () => {
                 toggleVisibility={handleDeleteSpentModalVisibility}
                 spentId={spentIdToDelete}
                 setSpents={setSpents}
+                setDataAboutSpents={setDataAboutSpents}
             />
 
             <RegisterSpentModal
                 isVisible={isRegisterSpentModalVisible}
                 toggleVisibility={handleRegisterSpentModalVisibility}
                 setSpents={setSpents}
+                setDataAboutSpents={setDataAboutSpents}
             />
 
-            <UpdateSpentModal 
+            <UpdateSpentModal
                 isVisible={isUpdateSpentModalVisible}
                 toggleVisibility={handleUpdateSpentModalVisibility}
                 spentId={spentIdToUpdate}
                 setSpents={setSpents}
+                setDataAboutSpents={setDataAboutSpents}
             />
 
-            <SpentDetailsModal 
+            <SpentDetailsModal
                 isVisible={isSpentDetailsModalVisible}
                 toggleVisibility={handleSpentDetailsModalVisibility}
                 spentId={spentIdToDetails}
             />
 
-            <LogoutModal 
+            <LogoutModal
                 isVisible={isLogoutModalVisible}
                 toggleVisibility={handleLogoutModalVisibility}
             />
 
-            <PersonalDataModal 
+            <PersonalDataModal
                 isVisible={isPersonalDataModalVisible}
                 toggleVisibility={handlePersonalDataModalVisibility}
             />

@@ -7,10 +7,10 @@ interface HeaderProps {
     togglePersonalDataModalVisibility: () => void
 }
 
-const Header = ({toggleLogoutModalVisibility, togglePersonalDataModalVisibility}: HeaderProps) => {
+const Header = ({ toggleLogoutModalVisibility, togglePersonalDataModalVisibility }: HeaderProps) => {
     return (
         <Navbar className="header">
-            <Container style={{height: "10vh"}} className="d-flex">
+            <Container style={{ height: "10vh" }} className="d-flex">
                 <Navbar.Brand>
                     <h2>WiseSpent</h2>
                 </Navbar.Brand>
@@ -18,7 +18,7 @@ const Header = ({toggleLogoutModalVisibility, togglePersonalDataModalVisibility}
                 <Nav>
                     <Dropdown drop="start">
                         <Dropdown.Toggle variant="" className="fs-2 d-flex align-items-center border-0">
-                            <FaUserCircle/>
+                            <FaUserCircle />
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>

@@ -16,3 +16,12 @@ export interface Spent {
     updatedAt: string,
     value: number
 };
+
+export interface SpentAmounts {
+    paidAmount: number,
+    pendingAmount: number,
+    spentsAmount: number,
+    totalPaid: string,
+    totalPending: string,
+    totalSpents: string
+};

@@ -9,9 +9,10 @@ interface DeleteSpentModalProps {
     toggleVisibility: () => void,
     spentId: number,
     setSpents: any,
+    setDataAboutSpents: any
 }
 
-const DeleteSpentModal = ({isVisible, toggleVisibility, spentId, setSpents}: DeleteSpentModalProps) => {
+const DeleteSpentModal = ({isVisible, toggleVisibility, spentId, setSpents, setDataAboutSpents}: DeleteSpentModalProps) => {
 
     async function removeSpent() {
         if(spentId) {
@@ -27,6 +28,7 @@ const DeleteSpentModal = ({isVisible, toggleVisibility, spentId, setSpents}: Del
                                 getSpentByUserId(response?.user.id).then((response) => {
                                     if(response?.success) {
                                         setSpents([...response?.spents]);
+                                        setDataAboutSpents(response?.data);
                                     }
                                 });
                             }

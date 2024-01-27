@@ -8,10 +8,11 @@ interface UpdateSpentModalProps {
     isVisible: boolean,
     toggleVisibility: () => void,
     spentId: number,
-    setSpents: any
+    setSpents: any,
+    setDataAboutSpents: any
 }
 
-const UpdateSpentModal = ({isVisible, toggleVisibility, spentId, setSpents}: UpdateSpentModalProps) => {
+const UpdateSpentModal = ({isVisible, toggleVisibility, spentId, setSpents, setDataAboutSpents}: UpdateSpentModalProps) => {
     const monthDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
 
     const [spent, setSpent] = useState<any>({
@@ -60,6 +61,7 @@ const UpdateSpentModal = ({isVisible, toggleVisibility, spentId, setSpents}: Upd
                                 getSpentByUserId(response?.user.id).then((response) => {
                                     if(response?.success) {
                                         setSpents([...response?.spents]);
+                                        setDataAboutSpents(response?.data);
                                     }
                                 });
                             }
