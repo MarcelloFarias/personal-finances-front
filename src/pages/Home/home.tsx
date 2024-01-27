@@ -198,7 +198,6 @@ const Home = () => {
                 toggleVisibility={handleDeleteSpentModalVisibility}
                 spentId={spentIdToDelete}
                 setSpents={setSpents}
-                spents={spents}
             />
 
             <RegisterSpentModal

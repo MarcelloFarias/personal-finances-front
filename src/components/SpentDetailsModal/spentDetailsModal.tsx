@@ -29,7 +29,7 @@ const SpentDetailsModal = ({isVisible, toggleVisibility, spentId}: SpentDetailsM
                 }
             });
         }   
-    }, [spentId, spent]);
+    }, [spentId]);
 
     function formatDate(date: any) {
         date.replace(':', '').replace('T', '');

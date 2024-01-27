@@ -1,29 +1,40 @@
 import { Modal, Button } from "react-bootstrap";
 import { deleteSpent } from "../../services/spent";
 import { alertToastError, alertToastSuccess } from "../Toast/toast";
-import { Spent } from "../../interfaces/spent.interface";
+import { getUser } from "../../services/user";
+import { getSpentByUserId } from "../../services/spent";
 
 interface DeleteSpentModalProps {
     isVisible: boolean,
     toggleVisibility: () => void,
     spentId: number,
     setSpents: any,
-    spents: Spent[]
 }
 
-const DeleteSpentModal = ({isVisible, toggleVisibility, spentId, setSpents, spents}: DeleteSpentModalProps) => {
+const DeleteSpentModal = ({isVisible, toggleVisibility, spentId, setSpents}: DeleteSpentModalProps) => {
 
     async function removeSpent() {
         if(spentId) {
             return await deleteSpent(spentId).then((response) => {
                 if(response?.success) {
-                    alertToastSuccess('Gasto excluído com sucesso !');
+                    toggleVisibility();
 
-                    setSpents(spents.filter((spent: any) => {
-                        return spent && spent.id !== spentId;
-                    }));
+                    const token = localStorage.getItem('token');
 
-                    return toggleVisibility();
+                    if(token) {
+                        getUser(token).then((response) => {
+                            if(response?.success) {
+                                getSpentByUserId(response?.user.id).then((response) => {
+                                    if(response?.success) {
+                                        setSpents([...response?.spents]);
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    return alertToastSuccess('Gasto excluído com sucesso !');
+
                 }
                 return alertToastError(response?.message);
             });

@@ -41,7 +41,7 @@ const RegisterSpentModal = ({ isVisible, toggleVisibility, setSpents }: Register
                         value: 0,
                         status: 'pendente',
                         idUser: response?.user.id
-                    })
+                    });
                 }
             });
         }
