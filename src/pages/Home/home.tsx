@@ -24,6 +24,7 @@ import UpdateSpentModal from '../../components/UpdateSpentModal/updateSpentModal
 import SpentDetailsModal from '../../components/SpentDetailsModal/spentDetailsModal';
 import LogoutModal from '../../components/LogoutModal/logoutModal';
 import PersonalDataModal from '../../components/PersonalDataModal/personalDataModal';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const today: Date = new Date();
@@ -69,6 +70,8 @@ const Home = () => {
         pendingAmount: 0
     });
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const token = localStorage.getItem("token");
 
@@ -82,7 +85,13 @@ const Home = () => {
                         }
                     });
                 }
+                else {
+                    navigate('/notfound');
+                }
             });
+        }
+        else {
+            navigate('/notfound');
         }
     }, []);
 

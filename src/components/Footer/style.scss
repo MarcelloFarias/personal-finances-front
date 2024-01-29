@@ -7,3 +7,11 @@ footer {
     display: grid;
     place-items: center;
 }
+
+@media(max-width: 580px) {
+    footer {
+        p {
+            font-size: 12px;
+        }
+    }
+}

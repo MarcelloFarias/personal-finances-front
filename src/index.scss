@@ -33,3 +33,9 @@ body {
     padding: 2rem;
     width: 400px;
 }
+
+@media(max-width: 480px) {
+    .form-container {
+        width: 350px;
+    }
+}

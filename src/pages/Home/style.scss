@@ -9,6 +9,11 @@
 @media(max-width: 767px) {
     .home-card {
         margin-top: 20px;
+
+        .home-card-badge {
+            top: 5px;
+            right: 5px;
+        }
     }
 
     .spent-list-title {
