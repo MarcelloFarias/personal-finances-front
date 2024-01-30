@@ -215,7 +215,7 @@ const Home = () => {
                 <Row className='mt-5'>
                     <div className='spent-list-title d-flex justify-content-between mb-3'>
                         <h2>Meus gastos</h2>
-                        <Button variant='success' onClick={handleRegisterSpentModalVisibility}>Registrar um gasto</Button>
+                        <Button variant='success' onClick={handleRegisterSpentModalVisibility}>Novo gasto</Button>
                     </div>
                     {spents?.length > 0 ? (
                         <ListGroup className='border-0'>

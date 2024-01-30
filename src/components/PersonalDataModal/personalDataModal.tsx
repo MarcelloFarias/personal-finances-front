@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import { getUser } from "../../services/user";
 import { User } from "../../interfaces/user.interface";
-import { updateUserPersonalData, updateUserPassword } from "../../services/user";
+import { updateUserPersonalData, updateUserPassword, deleteUser } from "../../services/user";
 import { alertToastError, alertToastSuccess, alertToastWarning } from "../Toast/toast";
+import { useNavigate } from "react-router-dom";
 
 interface PersonalDataModalProps {
     isVisible: boolean,
@@ -58,27 +59,36 @@ const PersonalDataModal = ({isVisible, toggleVisibility}: PersonalDataModalProps
         setNewPassword(e.target.value);
     }
 
-    const [confirmationPassword, setConfirmationPassword] = useState<string>('');
+    const [confirmationPasswords, setConfirmationPasswords] = useState<any>({
+        newPassword: '',
+        deleteAccountPassword: ''
+    });
 
-    const handleConfirmationPassword = (e: any) => {
-        setConfirmationPassword(e.target.value);
+    const handleConfirmationPasswords = (e: any) => {
+        setConfirmationPasswords({
+            ...confirmationPasswords,
+            [e.target.name]: e.target.value
+        })
     }
 
     function updatePassword() {
-        if(newPassword && confirmationPassword) {
-            if(confirmationPassword !== user.password) {
+        if(newPassword && confirmationPasswords.newPassword) {
+            if(confirmationPasswords.newPassword !== user.password) {
                 return alertToastError('Senha atual incorreta, por favor tente novamente...');
             }
             else {
                 const newData = {
-                    password: newPassword
+                    password: confirmationPasswords.newPassword
                 }
 
                 return updateUserPassword(user.id, newData).then((response) => {
                     if(response?.success) {
                         toggleVisibility();
                         setNewPassword('');
-                        setConfirmationPassword('');
+                        setConfirmationPasswords({
+                            ...confirmationPasswords,
+                            newPassword: ''
+                        });
                         return alertToastSuccess('Senha alterada com sucesso !');
                     }
                     return alertToastError(response?.message);
@@ -87,6 +97,28 @@ const PersonalDataModal = ({isVisible, toggleVisibility}: PersonalDataModalProps
 
         }
         return alertToastWarning('Por favor, preencha todos os campos...');
+    }
+
+    const navigate = useNavigate();
+
+    function deleteAccount() {
+        if(confirmationPasswords.deleteAccountPassword) {
+            if(confirmationPasswords.deleteAccountPassword !== user.password) {
+                return alertToastError('Senha incorreta, por favor tente novamente...');
+            }
+
+            return deleteUser(user.id).then((response) => {
+                if(response?.success) {
+                    alertToastSuccess("Conta excluída com sucesso !");
+
+                    return setTimeout(() => {
+                        navigate('/');
+                    }, 3500);
+                }
+                return alertToastError(response?.message);
+            });
+        }
+        return alertToastWarning("Você precisa confirmar a senha para excluir sua conta...");
     }
 
     return (
@@ -109,9 +141,10 @@ const PersonalDataModal = ({isVisible, toggleVisibility}: PersonalDataModalProps
                     <Button variant="success" className="mt-3" onClick={() => updateUser()}>Editar informações</Button>
                 </Form.Group>
 
-                <Form.Group className="mt-5">
-                    <h2 className="text-danger">Zona de perigo</h2>
+                <h2 className="text-danger mt-5">Zona de perigo</h2>
 
+                <Form.Group className="mt-5">
+                    <Form.Label className="text-danger">Alterar senha</Form.Label>
                     <Form.Group className="mt-3">
                         <Form.Label>Nova senha</Form.Label>
                         <Form.Control type="password" name="password" value={newPassword} onChange={handleNewPassword} />
@@ -119,10 +152,21 @@ const PersonalDataModal = ({isVisible, toggleVisibility}: PersonalDataModalProps
 
                     <Form.Group className="mt-3">
                         <Form.Label>Confirme sua senha atual</Form.Label> 
-                        <Form.Control type="password" name="password" value={confirmationPassword} onChange={handleConfirmationPassword} />
+                        <Form.Control type="password" name="newPassword" onChange={handleConfirmationPasswords} />
                     </Form.Group>
 
                     <Button className="mt-3" variant="danger" onClick={() => updatePassword()}>Alterar senha</Button>
+                </Form.Group>
+
+                <Form.Group className="mt-5">
+                    <Form.Label className="text-danger">Excluir conta</Form.Label>
+
+                    <Form.Group className="mt-3">
+                        <Form.Label>Confirme sua senha para excluir a conta</Form.Label>
+                        <Form.Control type="password" name="deleteAccountPassword" onChange={handleConfirmationPasswords}/>
+                    </Form.Group>
+
+                    <Button variant="danger" className="mt-3" onClick={() => deleteAccount()}>Excluir minha conta</Button>
                 </Form.Group>
             </Modal.Body>
             <Modal.Footer>

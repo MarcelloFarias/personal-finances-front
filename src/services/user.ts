@@ -42,7 +42,7 @@ export const registerUser = async (userData: IUserRegistration) => {
 
 export const updateUserPersonalData = async (userId: number, newData: any) => {
     try {
-        const response = await axios.put(`${baseUrl}/updateUserPersonalData/${userId}`, newData);
+        const response = await axios.put(`${baseUrl}/updatePersonalData/${userId}`, newData);
         console.log(response.data);
         return response.data;
     }
@@ -59,5 +59,16 @@ export const updateUserPassword = async (userId: number, newData: any) => {
     }
     catch(error) {
         console.log('Fail to update user...', error);
+    }
+}
+
+export const deleteUser = async (userId: number) => {
+    try {
+        const response = await axios.delete(`${baseUrl}/deleteUser/${userId}`);
+        console.log(response.data);
+        return response.data;
+    }
+    catch(error) {
+        console.log('Fail to delete user...', error);
     }
 }
