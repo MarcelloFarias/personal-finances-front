@@ -27,7 +27,7 @@ const PersonalDataModal = ({isVisible, toggleVisibility}: PersonalDataModalProps
             [e.target.name]: e.target.value
         });
     }
-
+    
     useEffect(() => {
         const token = localStorage.getItem('token');
 
@@ -78,7 +78,7 @@ const PersonalDataModal = ({isVisible, toggleVisibility}: PersonalDataModalProps
             }
             else {
                 const newData = {
-                    password: confirmationPasswords.newPassword
+                    password: newPassword
                 }
 
                 return updateUserPassword(user.id, newData).then((response) => {

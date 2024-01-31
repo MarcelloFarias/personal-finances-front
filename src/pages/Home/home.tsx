@@ -158,59 +158,67 @@ const Home = () => {
             />
 
             <Container className='container mb-5'>
-                <Row>
-                    <Chart
-                        chartType='PieChart'
-                        width="100%"
-                        height="400px"
-                        data={chartData}
-                        options={chartOptions}
-                    />
-                </Row>
+                {spents?.length > 0 ? (
+                    <Row>
+                        <Chart
+                            chartType='PieChart'
+                            width="100%"
+                            height="400px"
+                            data={chartData}
+                            options={chartOptions}
+                        />
+                    </Row>
+                ) : (
+                    <div className='chart-row-info'>
+                        <h2>Cadastre seus gastos</h2>
+                    </div>
+                )}
 
-                <Row>
-                    <Col md={4}>
-                        <Card className='p-3 home-card'>
-                            <div className='home-card-badge'>
-                                <Badge bg='info' className='fs-4'>
-                                    {dataAboutSpents.spentsAmount}
-                                </Badge>
-                            </div>
-                            <Card.Title>Gastos Mensais</Card.Title>
-                            <Card.Body>
-                                <h3>R$ {dataAboutSpents.totalSpents}</h3>
-                            </Card.Body>
-                        </Card>
-                    </Col>
+                {spents?.length > 0 ? (
+                    <Row>
+                        <Col md={4}>
+                            <Card className='p-3 home-card'>
+                                <div className='home-card-badge'>
+                                    <Badge bg='info' className='fs-4'>
+                                        {dataAboutSpents.spentsAmount}
+                                    </Badge>
+                                </div>
+                                <Card.Title>Gastos Mensais</Card.Title>
+                                <Card.Body>
+                                    <h3>R$ {dataAboutSpents.totalSpents}</h3>
+                                </Card.Body>
+                            </Card>
+                        </Col>
 
-                    <Col md={4}>
-                        <Card className='p-3 home-card'>
-                            <div className='home-card-badge'>
-                                <Badge bg='warning' className='fs-4'>
-                                    {dataAboutSpents.pendingAmount}
-                                </Badge>
-                            </div>
-                            <Card.Title>Pendentes</Card.Title>
-                            <Card.Body>
-                                <h3>R$ {dataAboutSpents.totalPending}</h3>
-                            </Card.Body>
-                        </Card>
-                    </Col>
+                        <Col md={4}>
+                            <Card className='p-3 home-card'>
+                                <div className='home-card-badge'>
+                                    <Badge bg='warning' className='fs-4'>
+                                        {dataAboutSpents.pendingAmount}
+                                    </Badge>
+                                </div>
+                                <Card.Title>Pendentes</Card.Title>
+                                <Card.Body>
+                                    <h3>R$ {dataAboutSpents.totalPending}</h3>
+                                </Card.Body>
+                            </Card>
+                        </Col>
 
-                    <Col md={4}>
-                        <Card className='p-3 home-card'>
-                            <div className='home-card-badge'>
-                                <Badge bg='success' className='fs-4'>
-                                    {dataAboutSpents.paidAmount}
-                                </Badge>
-                            </div>
-                            <Card.Title>Pagos</Card.Title>
-                            <Card.Body>
-                                <h3>R$ {dataAboutSpents.totalPaid}</h3>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                </Row>
+                        <Col md={4}>
+                            <Card className='p-3 home-card'>
+                                <div className='home-card-badge'>
+                                    <Badge bg='success' className='fs-4'>
+                                        {dataAboutSpents.paidAmount}
+                                    </Badge>
+                                </div>
+                                <Card.Title>Pagos</Card.Title>
+                                <Card.Body>
+                                    <h3>R$ {dataAboutSpents.totalPaid}</h3>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
+                ) : null}
 
                 <Row className='mt-5'>
                     <div className='spent-list-title d-flex justify-content-between mb-3'>
