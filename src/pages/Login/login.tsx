@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Container, Form, Button, Image } from "react-bootstrap";
 import { BiUserCheck } from "react-icons/bi";
 import { PiEye, PiEyeClosedDuotone } from "react-icons/pi";
@@ -8,6 +8,8 @@ import './style.scss';
 import Footer from '../../components/Footer/footer';
 import { alertToastError, alertToastWarning } from '../../components/Toast/toast';
 import { useNavigate } from 'react-router-dom';
+import UnloggedHeader from '../../components/UnloggedHeader/unloggedHeader';
+import { ThemeContext } from '../../contexts/themeContext';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -43,14 +45,17 @@ const Login = () => {
         return alertToastWarning('Por favor, preencha todos os campos');
     }
 
+    const [theme] = useContext(ThemeContext);
+
     return (
         <>
+            <UnloggedHeader />
             <Container fluid className="container login-container">
                 <div className='img-field img-login-field'>
                     <Image className='w-75 img-login' src='/assets/login.svg' />
                 </div>
                 <div className='form-field login-form-field'>
-                    <Form className='form-container'>
+                    <Form className={`form-container ${theme === 'dark' && 'text-light'}`}>
                         <h2>Fazer Login <BiUserCheck /></h2>
 
                         <Form.Group className='mt-4'>
@@ -62,7 +67,7 @@ const Login = () => {
                             <Form.Label>Senha</Form.Label>
                             <div className='d-flex'>
                                 <Form.Control type={isPasswordVisible ? "text" : "password"} placeholder='Digite a sua senha...' name='password' onChange={handleLoginData} />
-                                <Button variant='' onClick={handlePasswordVisibility}>
+                                <Button variant='' className={`${theme === 'dark' && 'text-light'}`} onClick={handlePasswordVisibility}>
                                     {isPasswordVisible ? <PiEyeClosedDuotone /> : <PiEye />}
                                 </Button>
                             </div>

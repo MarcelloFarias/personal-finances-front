@@ -7,7 +7,7 @@ const NotFound = () => {
     return (
         <>
             <Container className="container not-found-container">
-                <Image style={{maxWidth: '90%'}} src="assets/page_not_found.svg"/>
+                <Image style={{maxWidth: '50%'}} src="assets/page_not_found.svg"/>
                 <h1 className="text-center">Ops, você precisa fazer login para continuar !</h1>
                 <div className="flex-row d-flex justify-content-center w-100">
                     <Link to='/'>

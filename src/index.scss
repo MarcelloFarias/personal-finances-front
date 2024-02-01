@@ -12,6 +12,20 @@ body {
     min-height: 100vh;
 }
 
+.header {
+    height: 10dvh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    position: sticky;
+    inset: 0;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(6px);
+}
+
 .container {
     width: 100%;
     min-height: 100dvh;

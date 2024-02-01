@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import './style.scss';
 import Header from '../../components/Header/header';
 import {
@@ -25,6 +25,7 @@ import SpentDetailsModal from '../../components/SpentDetailsModal/spentDetailsMo
 import LogoutModal from '../../components/LogoutModal/logoutModal';
 import PersonalDataModal from '../../components/PersonalDataModal/personalDataModal';
 import { useNavigate } from 'react-router-dom';
+import { ThemeContext } from '../../contexts/themeContext';
 
 const Home = () => {
     const today: Date = new Date();
@@ -150,6 +151,8 @@ const Home = () => {
 
     const handlePersonalDataModalVisibility = () => setIsPersonalDataModalVisible(!isPersonalDataModalVisible);
 
+    const [theme] = useContext(ThemeContext);
+
     return (
         <>
             <Header
@@ -159,7 +162,7 @@ const Home = () => {
 
             <Container className='container mb-5'>
                 {spents?.length > 0 ? (
-                    <Row>
+                    <Row className='mb-5'>
                         <Chart
                             chartType='PieChart'
                             width="100%"
@@ -170,14 +173,14 @@ const Home = () => {
                     </Row>
                 ) : (
                     <div className='chart-row-info'>
-                        <h2>Cadastre seus gastos</h2>
+                        <h2 className={`${theme === 'dark' && 'text-light'}`}>Cadastre seus gastos</h2>
                     </div>
                 )}
 
                 {spents?.length > 0 ? (
                     <Row>
                         <Col md={4}>
-                            <Card className='p-3 home-card'>
+                            <Card className={`p-3 home-card ${theme === 'dark' && 'bg-dark text-light border border-light'}`}>
                                 <div className='home-card-badge'>
                                     <Badge bg='info' className='fs-4'>
                                         {dataAboutSpents.spentsAmount}
@@ -191,7 +194,7 @@ const Home = () => {
                         </Col>
 
                         <Col md={4}>
-                            <Card className='p-3 home-card'>
+                            <Card className={`p-3 home-card ${theme === 'dark' && 'bg-dark text-light border border-light'}`}>
                                 <div className='home-card-badge'>
                                     <Badge bg='warning' className='fs-4'>
                                         {dataAboutSpents.pendingAmount}
@@ -205,7 +208,7 @@ const Home = () => {
                         </Col>
 
                         <Col md={4}>
-                            <Card className='p-3 home-card'>
+                            <Card className={`p-3 home-card ${theme === 'dark' && 'bg-dark text-light border border-light'}`}>
                                 <div className='home-card-badge'>
                                     <Badge bg='success' className='fs-4'>
                                         {dataAboutSpents.paidAmount}
@@ -222,15 +225,15 @@ const Home = () => {
 
                 <Row className='mt-5'>
                     <div className='spent-list-title d-flex justify-content-between mb-3'>
-                        <h2>Meus gastos</h2>
+                        <h2 className={`${theme === 'dark' && 'text-light'}`}>Meus gastos</h2>
                         <Button variant='success' onClick={handleRegisterSpentModalVisibility}>Novo gasto</Button>
                     </div>
                     {spents?.length > 0 ? (
-                        <ListGroup className='border-0'>
+                        <ListGroup className={`border-0 ${theme === 'dark' && 'bg-dark'}`}>
                             {spents?.map((spent: any) => {
                                 return (
-                                    <ListGroup.Item key={spent.id} className='border-0'>
-                                        <Card className='p-3'>
+                                    <ListGroup.Item key={spent.id} className={`border-0 ${theme === 'dark' && 'bg-dark'}`}>
+                                        <Card className={`p-3 ${theme === 'dark' && 'bg-dark text-light border border-light'}`}>
                                             <Card.Title className='d-flex align-items-center justify-content-between'>
                                                 <div className='d-flex align-items-center'>
                                                     {spent.name}
@@ -257,7 +260,7 @@ const Home = () => {
                             })}
                         </ListGroup>
                     ) : (
-                        <p className='text-center mt-4'>Você ainda não possui gastos registrados</p>
+                        <p className={`text-center mt-5 ${theme === 'dark' && 'text-light'}`}>Você ainda não possui gastos registrados</p>
                     )}
                 </Row>
             </Container>

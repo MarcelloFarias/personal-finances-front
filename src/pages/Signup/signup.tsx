@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Container, Button, Form, Image } from 'react-bootstrap';
 import './style.scss';
 import { BiUserPlus } from "react-icons/bi";
@@ -8,6 +8,8 @@ import { registerUser } from '../../services/user';
 import { PiEye, PiEyeClosedDuotone } from "react-icons/pi";
 import Footer from '../../components/Footer/footer';
 import { alertToastError, alertToastSuccess, alertToastWarning } from '../../components/Toast/toast';
+import UnloggedHeader from '../../components/UnloggedHeader/unloggedHeader';
+import { ThemeContext } from '../../contexts/themeContext';
 
 const Signup = () => {
     const [userData, setUserData] = useState<IUserRegistration>({
@@ -48,11 +50,14 @@ const Signup = () => {
     const handleIsPasswordVisible = () => setIsPasswordVisible(!isPasswordVisible);
     const handleIsConfirmPasswordVisible = () => setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
 
+    const [theme] = useContext(ThemeContext);
+
     return (
         <>
+            <UnloggedHeader />
             <Container className='container signup-container'>
                 <div className='form-field signup-form-field'>
-                    <Form className='form-container'>
+                    <Form className={`form-container ${theme === 'dark' && 'text-light'}`}>
                         <h2>Registre-se <BiUserPlus /></h2>
 
                         <Form.Group className='mt-5'>
@@ -69,7 +74,7 @@ const Signup = () => {
                             <Form.Label>Senha</Form.Label>
                             <div className='d-flex'>
                                 <Form.Control type={isPasswordVisible ? 'text' : 'password'} name='password' placeholder='Crie uma senha...' onChange={handleUserData} />
-                                <Button variant='' onClick={handleIsPasswordVisible}>
+                                <Button variant='' className={`${theme === 'dark' && 'text-light'}`} onClick={handleIsPasswordVisible}>
                                     {isPasswordVisible ? <PiEyeClosedDuotone /> : <PiEye />}
                                 </Button>
                             </div>
@@ -79,7 +84,7 @@ const Signup = () => {
                             <Form.Label>Confirme sua senha</Form.Label>
                             <div className='d-flex'>
                                 <Form.Control type={isConfirmPasswordVisible ? 'text' : 'password'} placeholder='Agora confirme a sua senha...' value={confirmPassword} onChange={handleConfirmPassword} />
-                                <Button variant='' onClick={handleIsConfirmPasswordVisible}>
+                                <Button variant='' className={`${theme === 'dark' && 'text-light'}`} onClick={handleIsConfirmPasswordVisible}>
                                     {isConfirmPasswordVisible ? <PiEyeClosedDuotone /> : <PiEye />}
                                 </Button>
                             </div>
