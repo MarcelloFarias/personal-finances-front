@@ -26,3 +26,41 @@ As funcionalidades também incluem:
 - `Funcionalidade 11`: Retorno do mês atual em forma de string
 - `Funcionalidade 12`: Formatação de datas do detalhe de um gasto
 - `Funcionalidade 13`: Alteração do tema
+
+# 📂 Acesso ao projeto
+
+Você pode baixar o projeto ou cloná-lo direto em um diretório do seu computador utilizando:
+```
+git clone https://github.com/MarcelloFarias/notes-app.git
+```
+
+# 🛠️ Rodando o projeto
+
+Após baixar o projeto ou cloná-lo, abra-o no editor de código de sua preferência.
+
+Instale todas as dependências utilizando:
+```
+npm install
+```
+
+Depois basta rodar o projeto:
+```
+npm run dev
+```
+
+# 😄 Sinta-se à vontade para contribuir
+
+1. Bifurque este repositório.
+2. Crie um branch: `git checkout -b <nome_branch>`.
+3. Faça suas alterações e confirme-as: `git commit -m '<mensagem_commit>'`
+4. Envie para o branch original: `git push origin <nome_do_projeto> / <local>`
+5. Crie a solicitação de pull.
+
+# 📜 Licença
+
+[![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE) <br>
+Distribuído sob a licença MIT. Consulte `LICENSE` para obter mais informações.
+
+# 📫Contato
+
+Marcello Farias - [Linkedin](https://www.linkedin.com/in/marcello-rocha-381572231/) - [Instagram](https://www.instagram.com/cello.farias) 
