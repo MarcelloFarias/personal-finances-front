@@ -31,7 +31,7 @@ As funcionalidades também incluem:
 
 Você pode baixar o projeto ou cloná-lo direto em um diretório do seu computador utilizando:
 ```
-git clone https://github.com/MarcelloFarias/notes-app.git
+git clone https://github.com/MarcelloFarias/wise-spent-front.git
 ```
 
 # 🛠️ Rodando o projeto
