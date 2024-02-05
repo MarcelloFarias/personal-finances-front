@@ -15,7 +15,7 @@ const Header = ({ toggleLogoutModalVisibility, togglePersonalDataModalVisibility
     return (
         <Navbar className={`header ${theme == 'dark' && 'bg-dark'}`}>
             <Navbar.Brand className={`${theme == 'dark' ? 'bg-dark text-light' : ''}`}>
-                    <h2>WiseSpent</h2>
+                    <h2>W$</h2>
                 </Navbar.Brand>
 
                 <Nav className="d-flex align-items-center">
