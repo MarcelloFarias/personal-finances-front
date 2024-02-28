@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IUserRegistration } from '../interfaces/user.interface';
 
-const baseUrl = 'http://192.168.0.107:8080';
+const baseUrl = 'http://localhost:8080';
 
 export const login = async (userLoginData: any) => {
     try {

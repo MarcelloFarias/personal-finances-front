@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ISpentRegistration } from "../interfaces/spent.interface";
 
-const baseUrl = 'http://192.168.0.107:8080';
+const baseUrl = 'http://localhost:8080';
 
 export const getSpentByUserId = async (userId: number) => {
     try {
